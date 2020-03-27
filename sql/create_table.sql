@@ -1,8 +1,10 @@
-\c visual_novel
+\c test_db
 
-DROP TABLE IF EXISTS bland_list CASCADE;
-DROP TABLE IF EXISTS bland_list_id_seq CASCADE;
-CREATE TABLE bland_list
+SET ROLE visual_noveler;
+
+DROP TABLE IF EXISTS visual_novel.bland_list CASCADE;
+DROP TABLE IF EXISTS visual_novel.bland_list_id_seq CASCADE;
+CREATE TABLE visual_novel.bland_list
 (
     id                  SERIAL,
     created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -15,9 +17,9 @@ CREATE TABLE bland_list
     PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS game_list CASCADE;
-DROP TABLE IF EXISTS game_list_id_seq CASCADE;
-CREATE TABLE game_list
+DROP TABLE IF EXISTS visual_novel.game_list CASCADE;
+DROP TABLE IF EXISTS visual_novel.game_list_id_seq CASCADE;
+CREATE TABLE visual_novel.game_list
 (
     id                  SERIAL,
     created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -26,39 +28,36 @@ CREATE TABLE game_list
     game_furigana       TEXT        NOT NULL,
     bland_name          INTEGER     NOT NULL,
     launch_day          DATE        NOT NULL,
-    platform            TEXT        NOT NULL,
-    lasted_ver          TEXT        NOT NULL,
     price               INTEGER     NOT NULL,
-    lasted_patch_day    TIMESTAMP,
+    platform            TEXT        NOT NULL,
     is_adult_only       BOOLEAN     NOT NULL,
+    lasted_ver          TEXT        NOT NULL,
+    lasted_patch_day    TIMESTAMP,
     site_url            TEXT,
     twitter_id          TEXT,
-
-
     PRIMARY KEY(id),
-    FOREIGN KEY(bland_name) REFERENCES bland_list(id) 
+    FOREIGN KEY(bland_name) REFERENCES visual_novel.bland_list(id) 
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS creater_list CASCADE;
-DROP TABLE IF EXISTS creater_list_id_seq CASCADE;
-CREATE TABLE creater_list
+DROP TABLE IF EXISTS visual_novel.creater_list CASCADE;
+DROP TABLE IF EXISTS visual_novel.creater_list_id_seq CASCADE;
+CREATE TABLE  visual_novel.creater_list
 (
     id                  SERIAL,
     created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     creater_name        TEXT        NOT NULL,
     creaters_furigana   TEXT        NOT NULL,
-    twitter_id          TEXT,
     gender              BOOLEAN,
-
+    twitter_id          TEXT,
     PRIMARY KEY(id) 
 );
 
-DROP TABLE IF EXISTS work_infomations CASCADE;
-DROP TABLE IF EXISTS work_infomations_id_seq CASCADE;
-CREATE TABLE work_infomations
+DROP TABLE IF EXISTS visual_novel.work_infomations CASCADE;
+DROP TABLE IF EXISTS visual_novel.work_infomations_id_seq CASCADE;
+CREATE TABLE visual_novel.work_infomations
 (
     id                  SERIAL,
     created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -67,10 +66,10 @@ CREATE TABLE work_infomations
     creater             INTEGER     NOT NULL,
     job                 INTEGER     NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(game) REFERENCES game_list(id)
+    FOREIGN KEY(game) REFERENCES visual_novel.game_list(id)
         ON DELETE SET NULL
         ON UPDATE CASCADE,
-    FOREIGN KEY(creater) REFERENCES creater_list(id)
+    FOREIGN KEY(creater) REFERENCES visual_novel.creater_list(id)
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
